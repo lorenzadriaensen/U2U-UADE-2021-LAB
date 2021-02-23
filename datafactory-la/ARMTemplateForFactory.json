@@ -1,0 +1,1543 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "datafactory-la"
+		},
+		"AzureDataLakeG2_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeG2'"
+		},
+		"BLOBBabsSource_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'BLOBBabsSource'"
+		},
+		"AzureDataLakeG2_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datalakela.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/CopyBabsToRawStation')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_lgq",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "u2ulabs/data/babs/source/stationdata/2015/201508_station_data.csv"
+							},
+							{
+								"name": "Destination",
+								"value": "datalake/RAW/BABS/Station/"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"skipLineCount": 0
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"validateDataConsistency": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "station_id",
+											"type": "String"
+										},
+										"sink": {
+											"name": "station_id",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "lat",
+											"type": "String"
+										},
+										"sink": {
+											"name": "lat",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "long",
+											"type": "String"
+										},
+										"sink": {
+											"name": "long",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "dockcount",
+											"type": "String"
+										},
+										"sink": {
+											"name": "dockcount",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "landmark",
+											"type": "String"
+										},
+										"sink": {
+											"name": "landmark",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "installation",
+											"type": "String"
+										},
+										"sink": {
+											"name": "installation",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_lgq",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_lgq",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2021-02-23T09:44:58Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_lgq')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_lgq')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CopyBabsToRawStatus')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_hm9",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "u2ulabs/data/babs/source/status_data_2015.csv.gz"
+							},
+							{
+								"name": "Destination",
+								"value": "//"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"skipLineCount": 0
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"validateDataConsistency": false
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_hm9",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_hm9",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2021-02-23T09:47:22Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_hm9')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_hm9')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CopyBabsToRawTrip')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_7u1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "u2ulabs/data/babs/source/tripdata/201508_trip_data.csv"
+							},
+							{
+								"name": "Destination",
+								"value": "datalake/RAW/BABS/Trip/"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"skipLineCount": 0
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"validateDataConsistency": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Trip ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Trip_ID"
+										}
+									},
+									{
+										"source": {
+											"name": "Duration",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Duration",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Start Date",
+											"type": "String"
+										},
+										"sink": {
+											"name": "StartDate"
+										}
+									},
+									{
+										"source": {
+											"name": "Start Station",
+											"type": "String"
+										},
+										"sink": {
+											"name": "StartStation"
+										}
+									},
+									{
+										"source": {
+											"name": "Start Terminal",
+											"type": "String"
+										},
+										"sink": {
+											"name": "StartTerminal"
+										}
+									},
+									{
+										"source": {
+											"name": "End Date",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EndDate"
+										}
+									},
+									{
+										"source": {
+											"name": "End Station",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EndStation"
+										}
+									},
+									{
+										"source": {
+											"name": "End Terminal",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EndTerminal"
+										}
+									},
+									{
+										"source": {
+											"name": "Bike #",
+											"type": "String"
+										},
+										"sink": {
+											"name": "BikeNo"
+										}
+									},
+									{
+										"source": {
+											"name": "Subscriber Type",
+											"type": "String"
+										},
+										"sink": {
+											"name": "SubscriberType"
+										}
+									},
+									{
+										"source": {
+											"name": "Zip Code",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ZipCode"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_7u1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_7u1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2021-02-23T10:03:15Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_7u1')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_7u1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CopyBabsToRawWeather')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_niw",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "u2ulabs/data/babs/source/weather_data/201508_weather_data.csv"
+							},
+							{
+								"name": "Destination",
+								"value": "datalake/RAW/BABS/Weather/"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"skipLineCount": 0
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"validateDataConsistency": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "PDT",
+											"type": "String"
+										},
+										"sink": {
+											"name": "PDT",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Max TemperatureF",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Max TemperatureF",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Mean TemperatureF",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Mean TemperatureF",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Min TemperatureF",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Min TemperatureF",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Max Dew PointF",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Max Dew PointF",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MeanDew PointF",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MeanDew PointF",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Min DewpointF",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Min DewpointF",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Max Humidity",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Max Humidity",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Mean Humidity",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Mean Humidity",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Min Humidity",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Min Humidity",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Max Sea Level PressureIn",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Max Sea Level PressureIn",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Mean Sea Level PressureIn",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Mean Sea Level PressureIn",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Min Sea Level PressureIn",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Min Sea Level PressureIn",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Max VisibilityMiles",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Max VisibilityMiles",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Mean VisibilityMiles",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Mean VisibilityMiles",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Min VisibilityMiles",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Min VisibilityMiles",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Max Wind SpeedMPH",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Max Wind SpeedMPH",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Mean Wind SpeedMPH",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Mean Wind SpeedMPH",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Max Gust SpeedMPH",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Max Gust SpeedMPH",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "PrecipitationIn",
+											"type": "String"
+										},
+										"sink": {
+											"name": "PrecipitationIn",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " CloudCover",
+											"type": "String"
+										},
+										"sink": {
+											"name": " CloudCover",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " Events",
+											"type": "String"
+										},
+										"sink": {
+											"name": " Events",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": " WindDirDegrees",
+											"type": "String"
+										},
+										"sink": {
+											"name": " WindDirDegrees",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Zip",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Zip",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_niw",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_niw",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2021-02-23T10:14:07Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_niw')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_niw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IterateBikeSharingFiles')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Metadata1",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ListOfDataFiles",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Metadata1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Metadata1').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Get Metadata2",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "Binary1",
+											"type": "DatasetReference",
+											"parameters": {
+												"FileName": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										},
+										"fieldList": [
+											"size"
+										],
+										"storeSettings": {
+											"type": "AzureBlobStorageReadSettings",
+											"recursive": true,
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "BinaryReadSettings"
+										}
+									}
+								},
+								{
+									"name": "If Condition1",
+									"type": "IfCondition",
+									"dependsOn": [
+										{
+											"activity": "Get Metadata2",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"expression": {
+											"value": "@less(activity('Get Metadata2').output.size, 200000)",
+											"type": "Expression"
+										},
+										"ifTrueActivities": [
+											{
+												"name": "Copy data1",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "7.00:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "BinarySource",
+														"storeSettings": {
+															"type": "AzureBlobStorageReadSettings",
+															"recursive": true
+														},
+														"formatSettings": {
+															"type": "BinaryReadSettings"
+														}
+													},
+													"sink": {
+														"type": "BinarySink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														}
+													},
+													"enableStaging": false
+												},
+												"inputs": [
+													{
+														"referenceName": "Binary1",
+														"type": "DatasetReference",
+														"parameters": {
+															"FileName": "@item().name"
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "Binary2",
+														"type": "DatasetReference",
+														"parameters": {}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ListOfDataFiles')]",
+				"[concat(variables('factoryId'), '/datasets/Binary1')]",
+				"[concat(variables('factoryId'), '/datasets/Binary2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Binary1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BLOBBabsSource",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FileName": {
+						"type": "string",
+						"defaultValue": "test.csv"
+					}
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						},
+						"folderPath": "data/babs/all data",
+						"container": "u2ulabs"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BLOBBabsSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Binary2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeG2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "RAW/BABS/SmallFiles",
+						"fileSystem": "datalake"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeG2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_7ca')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeG2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "RAW/BABS/Trip",
+						"fileSystem": "datalake"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeG2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_7u1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeG2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "RAW/BABS/Trip",
+						"fileSystem": "datalake"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeG2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_hm9')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeG2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "RAW/BABS/Status",
+						"fileSystem": "datalake"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeG2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_lgq')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeG2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "RAW/BABS/Station",
+						"fileSystem": "datalake"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeG2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_niw')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeG2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "RAW/BABS/Weather",
+						"fileSystem": "datalake"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeG2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ListOfDataFiles')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BLOBBabsSource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "data/babs/all data",
+						"container": "u2ulabs"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BLOBBabsSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_7ca')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BLOBBabsSource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "201508_trip_data.csv",
+						"folderPath": "data/babs/source/tripdata",
+						"container": "u2ulabs"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Trip ID",
+						"type": "String"
+					},
+					{
+						"name": "Duration",
+						"type": "String"
+					},
+					{
+						"name": "Start Date",
+						"type": "String"
+					},
+					{
+						"name": "Start Station",
+						"type": "String"
+					},
+					{
+						"name": "Start Terminal",
+						"type": "String"
+					},
+					{
+						"name": "End Date",
+						"type": "String"
+					},
+					{
+						"name": "End Station",
+						"type": "String"
+					},
+					{
+						"name": "End Terminal",
+						"type": "String"
+					},
+					{
+						"name": "Bike #",
+						"type": "String"
+					},
+					{
+						"name": "Subscriber Type",
+						"type": "String"
+					},
+					{
+						"name": "Zip Code",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BLOBBabsSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_7u1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BLOBBabsSource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "201508_trip_data.csv",
+						"folderPath": "data/babs/source/tripdata",
+						"container": "u2ulabs"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Trip ID",
+						"type": "String"
+					},
+					{
+						"name": "Duration",
+						"type": "String"
+					},
+					{
+						"name": "Start Date",
+						"type": "String"
+					},
+					{
+						"name": "Start Station",
+						"type": "String"
+					},
+					{
+						"name": "Start Terminal",
+						"type": "String"
+					},
+					{
+						"name": "End Date",
+						"type": "String"
+					},
+					{
+						"name": "End Station",
+						"type": "String"
+					},
+					{
+						"name": "End Terminal",
+						"type": "String"
+					},
+					{
+						"name": "Bike #",
+						"type": "String"
+					},
+					{
+						"name": "Subscriber Type",
+						"type": "String"
+					},
+					{
+						"name": "Zip Code",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BLOBBabsSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_hm9')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BLOBBabsSource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "status_data_2015.csv.gz",
+						"folderPath": "data/babs/source",
+						"container": "u2ulabs"
+					},
+					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
+					"compressionCodec": "gzip",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "station_id",
+						"type": "String"
+					},
+					{
+						"name": "bikes_available",
+						"type": "String"
+					},
+					{
+						"name": "docks_available",
+						"type": "String"
+					},
+					{
+						"name": "time",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BLOBBabsSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_lgq')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BLOBBabsSource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "201508_station_data.csv",
+						"folderPath": "data/babs/source/stationdata/2015",
+						"container": "u2ulabs"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "station_id",
+						"type": "String"
+					},
+					{
+						"name": "name",
+						"type": "String"
+					},
+					{
+						"name": "lat",
+						"type": "String"
+					},
+					{
+						"name": "long",
+						"type": "String"
+					},
+					{
+						"name": "dockcount",
+						"type": "String"
+					},
+					{
+						"name": "landmark",
+						"type": "String"
+					},
+					{
+						"name": "installation",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BLOBBabsSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_niw')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BLOBBabsSource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "201508_weather_data.csv",
+						"folderPath": "data/babs/source/weather_data",
+						"container": "u2ulabs"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "PDT",
+						"type": "String"
+					},
+					{
+						"name": "Max TemperatureF",
+						"type": "String"
+					},
+					{
+						"name": "Mean TemperatureF",
+						"type": "String"
+					},
+					{
+						"name": "Min TemperatureF",
+						"type": "String"
+					},
+					{
+						"name": "Max Dew PointF",
+						"type": "String"
+					},
+					{
+						"name": "MeanDew PointF",
+						"type": "String"
+					},
+					{
+						"name": "Min DewpointF",
+						"type": "String"
+					},
+					{
+						"name": "Max Humidity",
+						"type": "String"
+					},
+					{
+						"name": " Mean Humidity",
+						"type": "String"
+					},
+					{
+						"name": " Min Humidity",
+						"type": "String"
+					},
+					{
+						"name": " Max Sea Level PressureIn",
+						"type": "String"
+					},
+					{
+						"name": " Mean Sea Level PressureIn",
+						"type": "String"
+					},
+					{
+						"name": " Min Sea Level PressureIn",
+						"type": "String"
+					},
+					{
+						"name": " Max VisibilityMiles",
+						"type": "String"
+					},
+					{
+						"name": " Mean VisibilityMiles",
+						"type": "String"
+					},
+					{
+						"name": " Min VisibilityMiles",
+						"type": "String"
+					},
+					{
+						"name": " Max Wind SpeedMPH",
+						"type": "String"
+					},
+					{
+						"name": " Mean Wind SpeedMPH",
+						"type": "String"
+					},
+					{
+						"name": " Max Gust SpeedMPH",
+						"type": "String"
+					},
+					{
+						"name": "PrecipitationIn",
+						"type": "String"
+					},
+					{
+						"name": " CloudCover",
+						"type": "String"
+					},
+					{
+						"name": " Events",
+						"type": "String"
+					},
+					{
+						"name": " WindDirDegrees",
+						"type": "String"
+					},
+					{
+						"name": "Zip",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BLOBBabsSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeG2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeG2_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeG2_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BLOBBabsSource')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('BLOBBabsSource_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
