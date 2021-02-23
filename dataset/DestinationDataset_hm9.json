@@ -1,0 +1,21 @@
+{
+	"name": "DestinationDataset_hm9",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeG2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "RAW/BABS/Status",
+				"fileSystem": "datalake"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

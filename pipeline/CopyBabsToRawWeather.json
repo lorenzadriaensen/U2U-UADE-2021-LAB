@@ -1,0 +1,314 @@
+{
+	"name": "CopyBabsToRawWeather",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_niw",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "u2ulabs/data/babs/source/weather_data/201508_weather_data.csv"
+					},
+					{
+						"name": "Destination",
+						"value": "datalake/RAW/BABS/Weather/"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings",
+							"skipLineCount": 0
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"validateDataConsistency": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "PDT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PDT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Max TemperatureF",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Max TemperatureF",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Mean TemperatureF",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Mean TemperatureF",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Min TemperatureF",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Min TemperatureF",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Max Dew PointF",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Max Dew PointF",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MeanDew PointF",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MeanDew PointF",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Min DewpointF",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Min DewpointF",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Max Humidity",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Max Humidity",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Mean Humidity",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Mean Humidity",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Min Humidity",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Min Humidity",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Max Sea Level PressureIn",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Max Sea Level PressureIn",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Mean Sea Level PressureIn",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Mean Sea Level PressureIn",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Min Sea Level PressureIn",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Min Sea Level PressureIn",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Max VisibilityMiles",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Max VisibilityMiles",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Mean VisibilityMiles",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Mean VisibilityMiles",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Min VisibilityMiles",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Min VisibilityMiles",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Max Wind SpeedMPH",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Max Wind SpeedMPH",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Mean Wind SpeedMPH",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Mean Wind SpeedMPH",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Max Gust SpeedMPH",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Max Gust SpeedMPH",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PrecipitationIn",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PrecipitationIn",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " CloudCover",
+									"type": "String"
+								},
+								"sink": {
+									"name": " CloudCover",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Events",
+									"type": "String"
+								},
+								"sink": {
+									"name": " Events",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " WindDirDegrees",
+									"type": "String"
+								},
+								"sink": {
+									"name": " WindDirDegrees",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Zip",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Zip",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_niw",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_niw",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-02-23T10:14:07Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

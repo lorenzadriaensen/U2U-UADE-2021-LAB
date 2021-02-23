@@ -1,0 +1,122 @@
+{
+	"name": "SourceDataset_niw",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BLOBBabsSource",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "201508_weather_data.csv",
+				"folderPath": "data/babs/source/weather_data",
+				"container": "u2ulabs"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "PDT",
+				"type": "String"
+			},
+			{
+				"name": "Max TemperatureF",
+				"type": "String"
+			},
+			{
+				"name": "Mean TemperatureF",
+				"type": "String"
+			},
+			{
+				"name": "Min TemperatureF",
+				"type": "String"
+			},
+			{
+				"name": "Max Dew PointF",
+				"type": "String"
+			},
+			{
+				"name": "MeanDew PointF",
+				"type": "String"
+			},
+			{
+				"name": "Min DewpointF",
+				"type": "String"
+			},
+			{
+				"name": "Max Humidity",
+				"type": "String"
+			},
+			{
+				"name": " Mean Humidity",
+				"type": "String"
+			},
+			{
+				"name": " Min Humidity",
+				"type": "String"
+			},
+			{
+				"name": " Max Sea Level PressureIn",
+				"type": "String"
+			},
+			{
+				"name": " Mean Sea Level PressureIn",
+				"type": "String"
+			},
+			{
+				"name": " Min Sea Level PressureIn",
+				"type": "String"
+			},
+			{
+				"name": " Max VisibilityMiles",
+				"type": "String"
+			},
+			{
+				"name": " Mean VisibilityMiles",
+				"type": "String"
+			},
+			{
+				"name": " Min VisibilityMiles",
+				"type": "String"
+			},
+			{
+				"name": " Max Wind SpeedMPH",
+				"type": "String"
+			},
+			{
+				"name": " Mean Wind SpeedMPH",
+				"type": "String"
+			},
+			{
+				"name": " Max Gust SpeedMPH",
+				"type": "String"
+			},
+			{
+				"name": "PrecipitationIn",
+				"type": "String"
+			},
+			{
+				"name": " CloudCover",
+				"type": "String"
+			},
+			{
+				"name": " Events",
+				"type": "String"
+			},
+			{
+				"name": " WindDirDegrees",
+				"type": "String"
+			},
+			{
+				"name": "Zip",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,144 @@
+{
+	"name": "CopyBabsToRawStation",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_lgq",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "u2ulabs/data/babs/source/stationdata/2015/201508_station_data.csv"
+					},
+					{
+						"name": "Destination",
+						"value": "datalake/RAW/BABS/Station/"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings",
+							"skipLineCount": 0
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"validateDataConsistency": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "station_id",
+									"type": "String"
+								},
+								"sink": {
+									"name": "station_id",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "lat",
+									"type": "String"
+								},
+								"sink": {
+									"name": "lat",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "long",
+									"type": "String"
+								},
+								"sink": {
+									"name": "long",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "dockcount",
+									"type": "String"
+								},
+								"sink": {
+									"name": "dockcount",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "landmark",
+									"type": "String"
+								},
+								"sink": {
+									"name": "landmark",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "installation",
+									"type": "String"
+								},
+								"sink": {
+									"name": "installation",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_lgq",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_lgq",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-02-23T09:44:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

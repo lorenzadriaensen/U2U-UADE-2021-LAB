@@ -1,0 +1,174 @@
+{
+	"name": "CopyBabsToRawTrip",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_7u1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "u2ulabs/data/babs/source/tripdata/201508_trip_data.csv"
+					},
+					{
+						"name": "Destination",
+						"value": "datalake/RAW/BABS/Trip/"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings",
+							"skipLineCount": 0
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"validateDataConsistency": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Trip ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Trip_ID"
+								}
+							},
+							{
+								"source": {
+									"name": "Duration",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Duration",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Start Date",
+									"type": "String"
+								},
+								"sink": {
+									"name": "StartDate"
+								}
+							},
+							{
+								"source": {
+									"name": "Start Station",
+									"type": "String"
+								},
+								"sink": {
+									"name": "StartStation"
+								}
+							},
+							{
+								"source": {
+									"name": "Start Terminal",
+									"type": "String"
+								},
+								"sink": {
+									"name": "StartTerminal"
+								}
+							},
+							{
+								"source": {
+									"name": "End Date",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EndDate"
+								}
+							},
+							{
+								"source": {
+									"name": "End Station",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EndStation"
+								}
+							},
+							{
+								"source": {
+									"name": "End Terminal",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EndTerminal"
+								}
+							},
+							{
+								"source": {
+									"name": "Bike #",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BikeNo"
+								}
+							},
+							{
+								"source": {
+									"name": "Subscriber Type",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SubscriberType"
+								}
+							},
+							{
+								"source": {
+									"name": "Zip Code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ZipCode"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_7u1",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_7u1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2021-02-23T10:03:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
