@@ -22,9 +22,12 @@
 				},
 				{
 					"name": "Join1"
+				},
+				{
+					"name": "Select1"
 				}
 			],
-			"script": "source(output(\n\t\t{Trip ID} as string,\n\t\tDuration as integer,\n\t\t{Start Date} as string,\n\t\t{Start Station} as string,\n\t\t{Start Terminal} as string,\n\t\t{End Date} as string,\n\t\t{End Station} as string,\n\t\t{End Terminal} as string,\n\t\t{Bike #} as string,\n\t\t{Subscriber Type} as string,\n\t\t{Zip Code} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 aggregate(groupBy({Start Station}),\n\t{Trip ID} = count({Trip ID}),\n\t\tDuration = avg(Duration)) ~> AggregateStart\nsource1 aggregate(groupBy({End Station}),\n\t{Trip ID} = count({Trip ID}),\n\t\tDuration = avg(Duration)) ~> AggregateEnd\nAggregateStart, AggregateEnd join({Start Station} == {End Station},\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Join1"
+			"script": "source(output(\n\t\t{Trip ID} as string,\n\t\tDuration as integer,\n\t\t{Start Date} as string,\n\t\t{Start Station} as string,\n\t\t{Start Terminal} as string,\n\t\t{End Date} as string,\n\t\t{End Station} as string,\n\t\t{End Terminal} as string,\n\t\t{Bike #} as string,\n\t\t{Subscriber Type} as string,\n\t\t{Zip Code} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 aggregate(groupBy({Start Station}),\n\t{Trip ID} = count({Trip ID}),\n\t\tDuration = avg(Duration)) ~> AggregateStart\nsource1 aggregate(groupBy({End Station}),\n\t{Trip ID} = count({Trip ID}),\n\t\tDuration = avg(Duration)) ~> AggregateEnd\nAggregateStart, AggregateEnd join({Start Station} == {End Station},\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Join1\nJoin1 select(mapColumn(\n\t\tStation = {Start Station},\n\t\tCountTripsStarting = AggregateStart@{Trip ID},\n\t\tAvgDurationStarting = AggregateStart@Duration,\n\t\tCountTripsEnding = AggregateEnd@{Trip ID},\n\t\tAvgDurationEnding = AggregateEnd@Duration\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1"
 		}
 	}
 }
