@@ -13,8 +13,12 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
-			"script": "source(output(\n\t\t{Trip ID} as string,\n\t\tDuration as string,\n\t\t{Start Date} as string,\n\t\t{Start Station} as string,\n\t\t{Start Terminal} as string,\n\t\t{End Date} as string,\n\t\t{End Station} as string,\n\t\t{End Terminal} as string,\n\t\t{Bike #} as string,\n\t\t{Subscriber Type} as string,\n\t\t{Zip Code} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1"
+			"transformations": [
+				{
+					"name": "Aggregate1"
+				}
+			],
+			"script": "source(output(\n\t\t{Trip ID} as string,\n\t\tDuration as integer,\n\t\t{Start Date} as string,\n\t\t{Start Station} as string,\n\t\t{Start Terminal} as string,\n\t\t{End Date} as string,\n\t\t{End Station} as string,\n\t\t{End Terminal} as string,\n\t\t{Bike #} as string,\n\t\t{Subscriber Type} as string,\n\t\t{Zip Code} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 aggregate({Trip ID} = count({Trip ID}),\n\t\tDuration = avg(Duration)) ~> Aggregate1"
 		}
 	}
 }
