@@ -1,0 +1,69 @@
+{
+	"name": "DelimitedText2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BLOBBabsSource",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "201508_trip_data.csv",
+				"folderPath": "data/babs/all data",
+				"container": "u2ulabs"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Trip ID",
+				"type": "String"
+			},
+			{
+				"name": "Duration",
+				"type": "String"
+			},
+			{
+				"name": "Start Date",
+				"type": "String"
+			},
+			{
+				"name": "Start Station",
+				"type": "String"
+			},
+			{
+				"name": "Start Terminal",
+				"type": "String"
+			},
+			{
+				"name": "End Date",
+				"type": "String"
+			},
+			{
+				"name": "End Station",
+				"type": "String"
+			},
+			{
+				"name": "End Terminal",
+				"type": "String"
+			},
+			{
+				"name": "Bike #",
+				"type": "String"
+			},
+			{
+				"name": "Subscriber Type",
+				"type": "String"
+			},
+			{
+				"name": "Zip Code",
+				"type": "String"
+			}
+		]
+	}
+}
